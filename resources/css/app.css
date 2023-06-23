@@ -1,0 +1,64 @@
+/*
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+*/
+
+footer{
+    background: white;
+    padding: 15px;
+}
+header{
+    margin-top: 10px;
+    padding-bottom: 20px;
+}
+.table-width{
+    width: 95%;
+    margin: auto;
+}
+.h-home {
+    text-align: center;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+.f-inline {
+    display: inline-block;
+}
+.cent-box {
+    width: 50%;
+    margin: auto;
+}
+.ml {
+    margin-left: 5%;
+}
+#map {
+    height: 350px;
+    width: 85%;
+    margin: auto;
+}
+.adr {
+    padding-bottom: 15px;
+}
+.dspl-none {
+    display: none;
+}
+.center-btn {
+    width: 230px;
+    margin: auto;
+}
+
+.m-t-10{
+    margin-top: 10px;
+}
+
+.w-35{
+    width: 35%;
+}
+
+.m-t-15{
+    margin-top: 15px;
+}
+
+.marg-auto {
+    margin: auto;
+}
