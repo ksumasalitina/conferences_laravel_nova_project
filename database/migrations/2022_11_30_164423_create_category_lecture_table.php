@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('category_lecture', function (Blueprint $table) {
-            $table->foreignId('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->foreignId('lecture_id')->references('id')->on('lectures')->onDelete('cascade');
+            $table->foreignIdFor(\App\Models\Category::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(\App\Models\Lecture::class)->constrained()->onDelete('cascade');
         });
     }
 

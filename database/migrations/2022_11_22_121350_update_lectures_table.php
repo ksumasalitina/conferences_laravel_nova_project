@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('lectures', function (Blueprint $table) {
-            $table->unsignedBigInteger('slot_id');
+            $table->foreignIdFor(\App\Models\Slot::class)->after('meeting_id')->constrained();
         });
     }
 
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('lectures', function (Blueprint $table) {
-            $table->dropColumn('slot_id');
+            $table->dropConstrainedForeignIdFor(\App\Models\Slot::class);
         });
     }
 };

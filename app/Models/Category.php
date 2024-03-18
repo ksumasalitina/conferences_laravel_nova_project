@@ -5,19 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property int $parent_id
+ * @property string $name
+ *
+ * @property Category[] $children
+ * @property Category $parent
+ * @property Meeting[] $meetings
+ * @property Lecture[] $lectures
+ */
 class Category extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'parent_id'
-    ];
-
-    protected $casts = [
-        'name'=>'string',
-        'parent_id'=>'integer'
-    ];
+    protected $guarded = ['id'];
 
     public function children()
     {

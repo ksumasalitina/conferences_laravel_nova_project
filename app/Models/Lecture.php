@@ -6,27 +6,28 @@ use GuzzleHttp\Psr7\Request;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property int $meeting_id
+ * @property string $theme
+ * @property string $description
+ * @property string $presentation
+ * @property int $slot_id
+ * @property int $zoom_id
+ *
+ * @property Category[] $categories
+ * @property Comment[] $comments
+ * @property User $announcer
+ * @property Slot $slot
+ * @property Meeting $meeting
+ * @property Zoom $zoom
+ */
 class Lecture extends Model
 {
     use HasFactory;
 
-    protected $fillable =[
-        'user_id',
-        'meeting_id',
-        'slot_id',
-        'theme',
-        'description',
-        'presentation',
-        'zoom_id'
-    ];
-
-    protected $casts = [
-        'user_id'=>'integer',
-        'meeting_id'=>'integer',
-        'slot_id'=>'integer',
-        'theme'=>'string',
-        'description'=>'string',
-    ];
+    protected $guarded =['id'];
 
     public function category()
     {

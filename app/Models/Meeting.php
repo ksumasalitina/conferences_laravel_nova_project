@@ -8,25 +8,24 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @property int $id
+ * @property string $title
+ * @property string $date
+ * @property string $country
+ * @property string latitude
+ * @property string $longitude
+ *
+ * @property User[] $subscribers
+ * @property Slot[] $slots
+ * @property Category[] $categories
+ * @property Lecture[] $lectures
+ */
 class Meeting extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'title',
-        'date',
-        'country',
-        'latitude',
-        'longitude'
-    ];
-
-    protected $casts = [
-        'title'=>'string',
-        'date'=>'timestamp',
-        'country'=>'string',
-        'latitude'=>'string',
-        'longitude'=>'string'
-    ];
+    protected $guarded = ['id'];
 
     public function subscribers()
     {

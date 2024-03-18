@@ -5,21 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property int $lecture_id
+ * @property string $comment
+ *
+ * @property Lecture $lecture
+ * @property User $user
+ */
 class Comment extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'lecture_id',
-        'user_id',
-        'comment'
-    ];
-
-    protected $casts = [
-        'lecture_id'=>'integer',
-        'user_id'=>'integer',
-        'comment'=>'string'
-    ];
+    protected $guarded = ['id'];
 
     public function lecture()
     {
