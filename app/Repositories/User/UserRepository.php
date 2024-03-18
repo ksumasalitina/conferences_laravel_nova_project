@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Request;
 
 class UserRepository implements UserRepositoryInterface
 {
-    public function createUser(RegisterRequest $request)
+    public function createUser(RegisterRequest $request): User
     {
         $request['birthdate'] = date('Y/m/d', strtotime($request['birthdate']));
 
@@ -28,12 +28,12 @@ class UserRepository implements UserRepositoryInterface
         ]);
     }
 
-    public function getUserByEmail($email)
+    public function getUserByEmail($email): User
     {
         return User::where('email', $email)->firstOrFail();
     }
 
-    public function updateProfile(UpdateRequest $request, $id)
+    public function updateProfile(UpdateRequest $request, $id): int
     {
         $data = $request->only([
             'first_name',

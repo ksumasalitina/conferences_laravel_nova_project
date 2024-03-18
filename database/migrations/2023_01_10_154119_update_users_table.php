@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table){
-            $table->integer('plan_id')->nullable();
+            $table->foreignIdFor(\App\Models\Plan::class)->nullable()->constrained();
         });
     }
 
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table){
-            $table->dropColumn('plan_id');
+            $table->dropConstrainedForeignIdFor(\App\Models\Plan::class);
         });
     }
 };

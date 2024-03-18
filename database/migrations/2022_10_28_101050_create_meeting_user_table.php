@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('meeting_user', function (Blueprint $table) {
-            $table->foreignId('meeting_id')->constrained();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignIdFor(\App\Models\Meeting::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(\App\Models\User::class)->constrained()->onDelete('cascade');
         });
     }
 

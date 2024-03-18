@@ -4,53 +4,66 @@ namespace App\Repositories\Plan;
 
 use App\Models\Plan;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class PlanRepository implements PlanRepositoryInterface
 {
-    public function getAllPlans()
+    public function getAllPlans(): Collection
     {
         return Plan::all();
     }
 
-    public function getUserPlan()
+    public function getUserPlan(): Plan
     {
+        /** @var User $user */
         $user = User::findOrFail(auth('sanctum')->id());
-        $joins = 0;
 
-        if($user->plan_id == 1) $joins = 1 - $user->monthly_joins;
-        elseif ($user->plan_id == 2) $joins = 5 - $user->monthly_joins;
-        elseif ($user->plan_id == 3) $joins = 50 - $user->monthly_joins;
-        else $joins = 'Unlimited';
+        $joins = match ($user->plan_id) {
+            1 => 1 - $user->monthly_joins,
+            2 => 5 - $user->monthly_joins,
+            3 => 50 - $user->monthly_joins,
+            default => 'Unlimited'
+        };
 
+        /** @var Plan $plan */
         $plan = Plan::query()->findOrFail($user->plan_id);
-        $plan->joins = $joins;
+        $plan->setAttribute('joins', $joins);
+
         return $plan;
     }
 
-    public function getPlanById($id)
+    public function getPlanById($id): Plan
     {
+        /** @var Plan $plan */
         $plan = Plan::query()->findOrFail($id);
-        $plan->intent = auth('sanctum')->user()->createSetupIntent();
+        $plan->setAttribute('intent', auth('sanctum')->user()->createSetupIntent());
+
         return $plan;
     }
 
     public function subscription(Request $request)
     {
+        /** @var User $user */
         $user = User::query()->findOrFail(auth('sanctum')->id());
+
+        /** @var User $plan */
         $plan = Plan::query()->findOrfail($request->plan);
         $user->subscription($user->plan_id)->cancelNow();
-        User::query()->where('id',auth('sanctum')->id())->update(['plan_id'=>$request->plan]);
+
+        $user->update(['plan_id'=>$request->plan]);
 
         return $user->newSubscription($request->plan, $plan->stripe_plan)
             ->create($request->token);
     }
 
-    public function cancel()
+    public function cancel(): void
     {
+        /** @var User $user */
         $user = User::query()->findOrFail(auth('sanctum')->id());
+
         $user->subscription($user->plan_id)->cancelNow();
-        User::query()->where('id',auth('sanctum')->id())->update(['plan_id'=>1]);
+        $user->update(['plan_id'=>1]);
         $user->newSubscription(1, 'price_1MOjmPEnpsfQaHkImwfrBRKv')->create();
     }
 }

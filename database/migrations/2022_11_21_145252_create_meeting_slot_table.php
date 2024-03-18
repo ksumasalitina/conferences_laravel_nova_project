@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('meeting_slot', function (Blueprint $table) {
-            $table->foreignId('meeting_id')->constrained();
-            $table->foreignId('slot_id')->constrained();
+            $table->foreignIdFor(\App\Models\Meeting::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(\App\Models\Slot::class)->constrained()->onDelete('cascade');
         });
     }
 

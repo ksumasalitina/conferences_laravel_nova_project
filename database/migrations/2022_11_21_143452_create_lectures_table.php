@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('lectures', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('meeting_id');
+            $table->foreignIdFor(\App\Models\User::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(\App\Models\Meeting::class)->constrained()->onDelete('cascade');
             $table->string('theme',100);
             $table->timestamp('start');
             $table->timestamp('end');

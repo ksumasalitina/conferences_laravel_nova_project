@@ -3,12 +3,31 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Cashier\Billable;
 
+/**
+ * @property int $id
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $email
+ * @property string $birthdate
+ * @property string $country
+ * @property string $phone
+ * @property string $stripe_id
+ * @property int $plan_id
+ * @property int $monthly_joins
+ *
+ * @property Collection<Role> $roles
+ * @property Collection<Lecture> $lectures
+ * @property Collection<Comment> $comments
+ * @property Collection<Lecture> $favorites
+ * @property Plan $plan
+ */
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, Billable;
@@ -18,15 +37,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'first_name',
-        'last_name',
-        'email',
-        'password',
-        'birthdate',
-        'country',
-        'phone'
-    ];
+    protected $guarded = ['id'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -36,21 +47,6 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'first_name'=>'string',
-        'last_name'=>'string',
-        'email'=>'string',
-        'password'=>'string',
-        'birthdate'=>'date',
-        'country'=>'string',
-        'phone'=>'string'
     ];
 
     public function role()
