@@ -19,7 +19,7 @@ abstract class TestCase extends BaseTestCase
     protected const URL_CREATE_LECTURE = '/api/lectures';
     protected const URL_UPDATE_LECTURE = '/api/lectures/';
     protected const URL_DELETE_LECTURE = '/api/lectures/';
-    protected const URL_UPDATE_PROFILE = '/api/profile/edit/';
+    protected const URL_UPDATE_PROFILE = '/api/profile/';
     protected const URL_CREATE_CATEGORY = '/api/category';
     protected const URL_UPDATE_CATEGORY = '/api/category/';
     protected const URL_CREATE_COMMENT = '/api/comments';

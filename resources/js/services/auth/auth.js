@@ -52,7 +52,7 @@ const auth = {
         if(this.user().email === data.email){
             data.email = null;
         }
-        return await axios.put(`/api/profile/edit/${data.id}`,data);
+        return await axios.put(`/api/profile`,data);
     }
 };
 

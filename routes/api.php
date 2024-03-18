@@ -2,13 +2,16 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\MeetingController;
-use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\LectureController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ZoomController;
 use App\Http\Controllers\Api\PlanController;
+use App\Http\Controllers\Api\Auth\LoginController;
+use App\Http\Controllers\Api\Auth\RegisterController;
+use App\Http\Controllers\Api\Auth\LogoutController;
 
 
 /*
@@ -21,6 +24,10 @@ use App\Http\Controllers\Api\PlanController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::post('/register', RegisterController::class)->name('register');
+Route::post('/login', LoginController::class)->name('login');
+Route::post('/logout', LogoutController::class)->middleware('auth:sanctum')->name('logout');
 
 Route::controller(MeetingController::class)->group(function (){
     Route::get('meetings', 'index');
@@ -57,11 +64,8 @@ Route::controller(CommentController::class)->middleware('auth:sanctum')->group(f
     Route::get('/comments/export/{id}', 'export');
 });
 
-Route::controller(AuthController::class)->group(function () {
-    Route::post('/register', 'register');
-    Route::post('/login', 'login');
-    Route::post('/logout', 'logout')->middleware('auth:sanctum');
-    Route::put('/profile/edit/{id}','update')->middleware('auth:sanctum');
+Route::controller(UserController::class)->group(function () {
+    Route::put('/profile','update')->middleware('auth:sanctum');
 });
 
 Route::controller(FavoriteController::class)->middleware('auth:sanctum')->prefix('favorites')->group(function (){

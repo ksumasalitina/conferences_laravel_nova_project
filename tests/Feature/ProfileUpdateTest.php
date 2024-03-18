@@ -17,7 +17,7 @@ class ProfileUpdateTest extends TestCase
         $newUser = self::newUser();
         $newUser['email'] = 'email123@gmail.com';
 
-        $response = $this->actingAs($user)->putJson(self::URL_UPDATE_PROFILE . $user->id, $newUser);
+        $response = $this->actingAs($user)->putJson(self::URL_UPDATE_PROFILE, $newUser);
 
         $response->assertStatus(200);
         $response->assertJson(self::successMessageUpdateProfile());
@@ -30,7 +30,7 @@ class ProfileUpdateTest extends TestCase
         $newUser = self::newUser();
         $newUser['email'] = 'email123@gmail.com';
 
-        $response = $this->putJson(self::URL_UPDATE_PROFILE . $user->id, $newUser);
+        $response = $this->putJson(self::URL_UPDATE_PROFILE, $newUser);
 
         $response->assertStatus(401);
         $this->assertDatabaseMissing('users', self::structureDatabaseAfterUpdate());
