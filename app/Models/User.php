@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -19,11 +20,12 @@ use Laravel\Cashier\Billable;
  * @property string $phone
  * @property string $stripe_id
  * @property int $plan_id
+ * @property int $monthly_joins
  *
- * @property Role[] $roles
- * @property Lecture[] $lectures
- * @property Comment[] $comments
- * @property Lecture[] $favorites
+ * @property Collection<Role> $roles
+ * @property Collection<Lecture> $lectures
+ * @property Collection<Comment> $comments
+ * @property Collection<Lecture> $favorites
  * @property Plan $plan
  */
 class User extends Authenticatable

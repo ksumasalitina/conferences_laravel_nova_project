@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,10 +11,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $parent_id
  * @property string $name
  *
- * @property Category[] $children
+ * @property Collection<Category> $children
  * @property Category $parent
- * @property Meeting[] $meetings
- * @property Lecture[] $lectures
+ * @property Collection<Meeting> $meetings
+ * @property Collection<Lecture> $lectures
  */
 class Category extends Model
 {

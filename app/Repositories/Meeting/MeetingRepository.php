@@ -6,22 +6,24 @@ use App\Http\Requests\MeetingRequest;
 use App\Models\Country;
 use App\Models\Meeting;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class MeetingRepository implements MeetingRepositoryInterface
 {
-    public function getAllMeetings()
+    public function getAllMeetings(): Collection
     {
+        /** @var Collection<Meeting> $meetings */
         $meetings = Meeting::select(['id','title','date'])->latest()->paginate(15);
 
         foreach ($meetings as $meeting) {
-            $meeting->is_joined = $meeting->isJoined();
+            $meeting->setAttribute('is_joined', $meeting->isJoined());
         }
 
         return $meetings;
     }
 
-    public function getMeetingsByFilter(Request $request)
+    public function getMeetingsByFilter(Request $request): Collection
     {
         $query = Meeting::query()->select(['id','title','date'])->where('date','>=', date('Y-m-d'));
         if($request->filled('category'))
@@ -40,7 +42,7 @@ class MeetingRepository implements MeetingRepositoryInterface
         return $meetings;
     }
 
-    public function searchMeeting(Request $request)
+    public function searchMeeting(Request $request): Collection
     {
         $query = Meeting::query()->select('id','title')->where('date','>=', date('Y-m-d'));
         if($request->filled('title'))
@@ -49,26 +51,27 @@ class MeetingRepository implements MeetingRepositoryInterface
         return $query->get();
     }
 
-    public function getMeetingById($id)
+    public function getMeetingById($id): Meeting
     {
+        /** @var Meeting $meeting */
         $meeting = Meeting::findOrFail($id);
-        $meeting->category = $meeting->category;
+        $meeting->setAttribute('category', $meeting->category);
         return $meeting;
     }
 
-    public function deleteMeeting($id)
+    public function deleteMeeting($id): int
     {
         return Meeting::destroy($id);
     }
 
-    public function createMeeting(MeetingRequest $meetingRequest)
+    public function createMeeting(MeetingRequest $meetingRequest): Meeting
     {
         $meetingRequest['date'] = date('Y/m/d H:i', strtotime($meetingRequest['date']));
 
         return Meeting::create($meetingRequest->all());
     }
 
-    public function updateMeeting($id, MeetingRequest $meetingRequest)
+    public function updateMeeting($id, MeetingRequest $meetingRequest): int
     {
         $meetingRequest['date'] = date('Y/m/d H:i', strtotime($meetingRequest['date']));
 
@@ -83,12 +86,12 @@ class MeetingRepository implements MeetingRepositoryInterface
         return Meeting::whereId($id)->update($data);
     }
 
-    public function getCountries()
+    public function getCountries(): Collection
     {
         return Country::query()->select('name')->get();
     }
 
-    public function sendNewListenerEmail($meeting, $user)
+    public function sendNewListenerEmail($meeting, $user): void
     {
         $listener = User::findOrFail($user);
         $announcers = array_column($meeting->subscribers->toArray(),'id');
@@ -99,7 +102,7 @@ class MeetingRepository implements MeetingRepositoryInterface
         event(new JoinListener($meeting, $listener, $recipient));
     }
 
-    public function join($id)
+    public function join($id): bool
     {
         $meeting = Meeting::findOrFail($id);
         $user = User::findOrFail(auth('sanctum')->id());
@@ -125,10 +128,10 @@ class MeetingRepository implements MeetingRepositoryInterface
         }
     }
 
-    public function cancel($id)
+    public function cancel($id): void
     {
         $meeting = Meeting::findOrFail($id);
 
-        return $meeting->subscribers()->detach(auth()->user()->id);
+        $meeting->subscribers()->detach(auth()->user()->id);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Comment;
 
+use Illuminate\Database\Eloquent\Collection;
 use App\Events\AddComment;
 use App\Http\Requests\CommentRequest;
 use App\Models\Comment;
@@ -12,7 +13,7 @@ use App\Models\User;
 class CommentRepository implements CommentRepositoryInterface
 {
 
-    public function createComment(CommentRequest $request)
+    public function createComment(CommentRequest $request): Comment
     {
         $request['user_id'] = auth('sanctum')->id();
         $this->sendNewCommentEmail($request);
@@ -20,7 +21,7 @@ class CommentRepository implements CommentRepositoryInterface
         return Comment::create($request->all());
     }
 
-    public function getComments($id)
+    public function getComments($id): Collection
     {
         $comments = Comment::where('lecture_id',$id)->orderBy('created_at', 'desc')->get();
         foreach ($comments as $comment) {
@@ -31,7 +32,7 @@ class CommentRepository implements CommentRepositoryInterface
         return $comments;
     }
 
-    public function updateComment(CommentRequest $request, $id)
+    public function updateComment(CommentRequest $request, $id): int
     {
         $data = $request->only([
             'user_id',
@@ -41,12 +42,12 @@ class CommentRepository implements CommentRepositoryInterface
         return Comment::where('id',$id)->update($data);
     }
 
-    public function deleteComment($id)
+    public function deleteComment($id): int
     {
         return Comment::destroy($id);
     }
 
-    public function sendNewCommentEmail($request)
+    public function sendNewCommentEmail($request): void
     {
         $lecture = Lecture::findOrFail($request['lecture_id']);
         $meeting = Meeting::findOrFail($lecture->meeting_id);

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use GuzzleHttp\Psr7\Request;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,8 +17,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $slot_id
  * @property int $zoom_id
  *
- * @property Category[] $categories
- * @property Comment[] $comments
+ * @property Collection<Category> $categories
+ * @property Collection<Comment> $comments
  * @property User $announcer
  * @property Slot $slot
  * @property Meeting $meeting

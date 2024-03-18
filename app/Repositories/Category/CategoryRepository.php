@@ -4,17 +4,18 @@ namespace App\Repositories\Category;
 
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
 
-    public function addCategory(CategoryRequest $request)
+    public function addCategory(CategoryRequest $request): Category
     {
         return Category::create($request->all());
     }
 
-    public function getCategories()
+    public function getCategories(): Collection
     {
         $categories = Category::where('parent_id',null)->get();
         foreach ($categories as $category){
@@ -23,7 +24,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         return $categories;
     }
 
-    public function getCategoryList()
+    public function getCategoryList(): Collection
     {
         $categories = Category::all();
 
@@ -42,12 +43,12 @@ class CategoryRepository implements CategoryRepositoryInterface
         return $categories;
     }
 
-    public function deleteCategory(Request $request)
+    public function deleteCategory(Request $request): int
     {
         return Category::destroy($request['id']);
     }
 
-    public function updateCategory(CategoryRequest $request, $id)
+    public function updateCategory(CategoryRequest $request, $id): int
     {
         $data = $request->only([
             'name',

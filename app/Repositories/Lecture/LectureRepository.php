@@ -7,14 +7,16 @@ use App\Models\Lecture;
 use App\Models\Meeting;
 use App\Models\Slot;
 use App\Traits\ZoomJWT;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class LectureRepository implements LectureRepositoryInterface
 {
     use ZoomJWT;
 
-    public function getMeetingLectures($id)
+    public function getMeetingLectures($id): Collection
     {
         $lectures =  Lecture::where('meeting_id',$id)->get();
         $user = auth('sanctum')->user();
@@ -43,7 +45,7 @@ class LectureRepository implements LectureRepositoryInterface
         return $lectures;
     }
 
-    public function getLecture($id)
+    public function getLecture($id): Lecture
     {
         $lecture = Lecture::findOrFail($id);
         $slot = Slot::findOrFail($lecture->slot_id);
@@ -63,7 +65,7 @@ class LectureRepository implements LectureRepositoryInterface
         return $lecture;
     }
 
-    public function getLecturesByFilters(Request $request)
+    public function getLecturesByFilters(Request $request): Collection
     {
         $query = Lecture::query()->where('meeting_id',$request['id']);
 
@@ -87,7 +89,7 @@ class LectureRepository implements LectureRepositoryInterface
         return $lectures;
     }
 
-    public function searchLectures(Request $request)
+    public function searchLectures(Request $request): Collection
     {
         $query = Lecture::query()->select('id', 'theme');
 
@@ -97,7 +99,7 @@ class LectureRepository implements LectureRepositoryInterface
         return $query->get();
     }
 
-    public function createLecture(LectureRequest $request)
+    public function createLecture(LectureRequest $request): Lecture
     {
         $request['user_id'] = auth('sanctum')->id();
 
@@ -112,12 +114,12 @@ class LectureRepository implements LectureRepositoryInterface
         return Lecture::create($data);
     }
 
-    public function deleteLecture($id)
+    public function deleteLecture($id): int
     {
         return Lecture::destroy($id);
     }
 
-    public function updateLecture(LectureRequest $request, $id)
+    public function updateLecture(LectureRequest $request, $id): int
     {
         $data = $request->only([
             'user_id',
@@ -130,19 +132,19 @@ class LectureRepository implements LectureRepositoryInterface
         return Lecture::where('id',$id)->update($data);
     }
 
-    public function getSlots($id)
+    public function getSlots($id): Collection
     {
         $meeting = Meeting::findOrFail($id);
         return $meeting->slots;
     }
 
-    public function getMeetingUserLecture($id)
+    public function getMeetingUserLecture($id): int
     {
         $lecture = Lecture::where('meeting_id',$id)->where('user_id', auth('sanctum')->id())->get();
         return $lecture[0]->id;
     }
 
-    public function downloadPresentation($presentation)
+    public function downloadPresentation($presentation): StreamedResponse
     {
         return Storage::disk('local')->download('presentations/'.$presentation);
     }
