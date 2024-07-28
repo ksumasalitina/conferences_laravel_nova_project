@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class MeetingRepository implements MeetingRepositoryInterface
 {
-    public function getAllMeetings(): Collection
+    public function getAllMeetings()
     {
         /** @var Collection<Meeting> $meetings */
         $meetings = Meeting::select(['id','title','date'])->latest()->paginate(15);
@@ -23,7 +23,7 @@ class MeetingRepository implements MeetingRepositoryInterface
         return $meetings;
     }
 
-    public function getMeetingsByFilter(Request $request): Collection
+    public function getMeetingsByFilter(Request $request)
     {
         $query = Meeting::query()->select(['id','title','date'])->where('date','>=', date('Y-m-d'));
         if($request->filled('category'))

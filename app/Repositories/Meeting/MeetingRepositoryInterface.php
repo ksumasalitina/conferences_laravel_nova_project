@@ -9,8 +9,8 @@ use Illuminate\Http\Request;
 
 interface MeetingRepositoryInterface
 {
-    public function getAllMeetings(): Collection;
-    public function getMeetingsByFilter(Request $request): Collection;
+    public function getAllMeetings();
+    public function getMeetingsByFilter(Request $request);
     public function searchMeeting(Request $request): Collection;
     public function getMeetingById($id): Meeting;
     public function deleteMeeting($id): int;

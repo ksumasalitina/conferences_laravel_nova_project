@@ -16,16 +16,12 @@ import SearchPage from "./components/search/SearchPage";
 import ZoomList from "./components/zoom/ZoomList";
 import PlansComponent from "./components/subscription/PlansComponent";
 import PaymentForm from "./components/subscription/PaymentForm";
-import Vue from "vue";
-import VueRouter from "vue-router";
 import auth from "./services/auth/auth";
+import { createMemoryHistory, createRouter } from 'vue-router'
 
-Vue.use(VueRouter);
 auth.init();
 
-const router = new VueRouter({
-    mode: 'history',
-    routes: [
+const routes = [
     {
         name: 'home',
         path: '/',
@@ -162,22 +158,26 @@ const router = new VueRouter({
         path: '/403',
         component: NoPermission
     }
-]});
+];
 
-router.beforeEach((to, from, next) => {
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-        if (!auth.loggedIn()) {
-            next({name: "login"});
-        }
-        else next();
-    }
-    else next();
+// router.beforeEach((to, from, next) => {
+//     if (to.matched.some(record => record.meta.requiresAuth)) {
+//         if (!auth.loggedIn()) {
+//             next({name: "login"});
+//         }
+//         else next();
+//     }
+//     else next();
+//
+//     if(to.matched.some(record => record.meta.is_admin)) {
+//         if (auth.user().role[0].name !== 'admin') next({name: '403'});
+//         else next();
+//     }
+//     else next();
+// });
 
-    if(to.matched.some(record => record.meta.is_admin)) {
-        if (auth.user().role[0].name !== 'admin') next({name: '403'});
-        else next();
-    }
-    else next();
-});
-
+const router = createRouter({
+    history: createMemoryHistory(),
+    routes
+})
 export default router;
